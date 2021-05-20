@@ -9,7 +9,8 @@ import com.picpay.desafio.android.infrastructure.interfaces.db.ContactDao
 
 @Database(
     entities = [User::class],
-    version = 1
+    version = 1,
+    exportSchema = true
 )
 abstract class ContactDatabase: RoomDatabase() {
     abstract fun getContactDao(): ContactDao
