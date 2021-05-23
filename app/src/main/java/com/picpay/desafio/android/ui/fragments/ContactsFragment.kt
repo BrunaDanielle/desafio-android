@@ -22,25 +22,27 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         setUpRecyclerView()
 
         viewModel.users.observe(viewLifecycleOwner, Observer { response ->
-            when(response){
-                is Resource.Success ->{
+            when (response) {
+                is Resource.Success -> {
                     hideProgressBar()
-                    response.data?.let{ usersResponse ->
+                    response.data?.let { usersResponse ->
                         userAdapter.setData(usersResponse)
                         viewModel.saveContacts(usersResponse)
                     }
                 }
-                is Resource.Error ->{
+                is Resource.Error -> {
                     hideProgressBar()
                 }
-                is Resource.Loading ->{
+                is Resource.Loading -> {
                     showProgressBar()
                 }
             }
         })
 
         viewModel.getSavedContacts().observe(viewLifecycleOwner, Observer { savedContacts ->
-            if(savedContacts == null || savedContacts.isEmpty()) viewModel.getUsers() else userAdapter.setData(savedContacts)
+            if (savedContacts == null || savedContacts.isEmpty()) viewModel.getUsers() else userAdapter.setData(
+                savedContacts
+            )
         })
 
         swipeRefreshLayout.setOnRefreshListener {
@@ -50,16 +52,16 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         }
     }
 
-    private fun hideProgressBar(){
+    private fun hideProgressBar() {
         user_list_progress_bar.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
     }
 
-    private fun showProgressBar(){
+    private fun showProgressBar() {
         user_list_progress_bar.visibility = View.VISIBLE
     }
 
-    private fun setUpRecyclerView(){
+    private fun setUpRecyclerView() {
         userAdapter = UserListAdapter()
         recyclerView.apply {
             adapter = userAdapter
