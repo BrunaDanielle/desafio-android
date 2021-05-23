@@ -11,7 +11,7 @@ import com.picpay.desafio.android.domain.models.User
 interface ContactDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(users: List<User>)
+    suspend fun upsert(users: List<User>): List<Long>
 
     @Query("SELECT * FROM users")
     fun getAllContacts(): LiveData<List<User>>

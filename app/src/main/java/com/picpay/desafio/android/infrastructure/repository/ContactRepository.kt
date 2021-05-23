@@ -4,7 +4,7 @@ import com.picpay.desafio.android.domain.models.User
 import com.picpay.desafio.android.framework.retrofit.RetrofitInstance
 import com.picpay.desafio.android.framework.room.ContactDatabase
 
-class ContactRepository(val db: ContactDatabase) {
+class ContactRepository(private val db: ContactDatabase) {
 
     suspend fun getUsers()= RetrofitInstance.api.getUsers()
 

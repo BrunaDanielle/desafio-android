@@ -9,11 +9,11 @@ import com.picpay.desafio.android.infrastructure.repository.ContactRepository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class ContactViewModel(private val contactRepository: ContactRepository): ViewModel() {
+class ContactViewModel(private val contactRepository: ContactRepository) : ViewModel() {
     val users: MutableLiveData<Resource<List<User>>> = MutableLiveData()
 
-    init{
-        getUsers()
+    init {
+        getSavedContacts()
     }
 
     fun getUsers() = viewModelScope.launch {
@@ -22,12 +22,18 @@ class ContactViewModel(private val contactRepository: ContactRepository): ViewMo
         users.postValue(handleUsersResponse(response))
     }
 
-    private fun handleUsersResponse(response: Response<List<User>>): Resource<List<User>>{
-        if (response.isSuccessful){
-            response.body()?.let{resultResponse ->
+    private fun handleUsersResponse(response: Response<List<User>>): Resource<List<User>> {
+        if (response.isSuccessful) {
+            response.body()?.let { resultResponse ->
                 return Resource.Success(resultResponse)
             }
         }
         return Resource.Error(response.message())
     }
+
+    fun saveContacts(user: List<User>) = viewModelScope.launch {
+        contactRepository.upsert(user)
+    }
+
+    fun getSavedContacts() = contactRepository.getSavedContacts()
 }

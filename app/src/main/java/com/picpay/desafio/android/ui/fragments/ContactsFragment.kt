@@ -27,6 +27,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                     hideProgressBar()
                     response.data?.let{ usersResponse ->
                         userAdapter.setData(usersResponse)
+                        viewModel.saveContacts(usersResponse)
                     }
                 }
                 is Resource.Error ->{
@@ -37,10 +38,21 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                 }
             }
         })
+
+        viewModel.getSavedContacts().observe(viewLifecycleOwner, Observer { savedContacts ->
+            if(savedContacts == null || savedContacts.isEmpty()) viewModel.getUsers() else userAdapter.setData(savedContacts)
+        })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            recyclerView.visibility = View.INVISIBLE
+            viewModel.getUsers()
+            swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun hideProgressBar(){
         user_list_progress_bar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
     }
 
     private fun showProgressBar(){

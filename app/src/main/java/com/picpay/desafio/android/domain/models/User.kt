@@ -10,7 +10,7 @@ import java.io.Serializable
 data class User(
     val img: String?,
     val name: String?,
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val username: String?
 ) : Serializable
