@@ -1,5 +1,6 @@
 package com.picpay.desafio.android.ui.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -32,6 +33,15 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                 }
                 is Resource.Error -> {
                     hideProgressBar()
+
+                    response.message?.let {message ->
+                        AlertDialog.Builder(context)
+                            .setCancelable(false)
+                            .setMessage(message)
+                            .setPositiveButton(context?.getString(R.string.ok_button), null)
+                            .create()
+                            .show()
+                    }
                 }
                 is Resource.Loading -> {
                     showProgressBar()

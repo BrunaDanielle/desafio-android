@@ -4,5 +4,9 @@
     <string name="error">Ocorreu um erro. Tente novamente.</string>
     <string name="name_not_found">Nome Não Informado</string>
     <string name="user_not_found">Usuário Não Informado</string>
+    <string name="no_internet_connection">Sem conexão com a internet</string>
+    <string name="network_failure">Erro de conexão com a rede</string>
+    <string name="data_failure">Erro ao carregar dados</string>
+    <string name="ok_button">OK</string>
 
 </resources>

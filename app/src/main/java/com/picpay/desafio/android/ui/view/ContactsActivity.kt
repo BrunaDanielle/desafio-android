@@ -18,7 +18,7 @@ class ContactsActivity : AppCompatActivity(R.layout.activity_contacts) {
         super.onCreate(savedInstanceState)
 
         val contactRepository = ContactRepository(ContactDatabase(this))
-        val viewModelProviderFactory = ContactViewModelProviderFactory(contactRepository)
+        val viewModelProviderFactory = ContactViewModelProviderFactory(application, contactRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory).get(ContactViewModel::class.java)
     }
 }
