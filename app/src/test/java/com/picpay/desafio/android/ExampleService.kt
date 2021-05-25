@@ -7,9 +7,9 @@ class ExampleService(
     private val service: PicPayService
 ) {
 
-    fun example(): List<User> {
-        val users = service.getUsers().execute()
+    suspend fun example(): List<User>? {
+      service.getUsers()
 
-        return users.body() ?: emptyList()
+        return emptyList()
     }
 }
