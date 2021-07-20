@@ -16,7 +16,7 @@ import org.junit.Assert.assertFalse
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4ClassRunner::class)
-class ContactViewModelTest{
+class ContactViewModelTest_{
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()

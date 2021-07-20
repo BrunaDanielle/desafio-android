@@ -14,7 +14,9 @@ import com.picpay.desafio.android.R
 import com.picpay.desafio.android.domain.models.User
 import com.picpay.desafio.android.domain.util.Resource
 import com.picpay.desafio.android.infrastructure.repository.ContactRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.io.IOException
 
@@ -25,7 +27,7 @@ class ContactViewModel(app: Application, private val contactRepository: ContactR
         getSavedContacts()
     }
 
-    fun getUsers() = viewModelScope.launch {
+    fun getUsers(){
         safeGetUsersCall()
     }
 
@@ -44,12 +46,16 @@ class ContactViewModel(app: Application, private val contactRepository: ContactR
 
     fun getSavedContacts() = contactRepository.getSavedContacts()
 
-    private suspend fun safeGetUsersCall(){
+    private fun safeGetUsersCall(){
         users.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()){
-                val response = contactRepository.getUsers()
-                users.postValue(handleUsersResponse(response))
+                viewModelScope.launch {
+                    withContext(Dispatchers.IO) {
+                        val response = contactRepository.getUsers()
+                        users.postValue(handleUsersResponse(response))
+                    }
+                }
             }else{
                 users.postValue(Resource.Error(getApplication<ContactsApplication>().getString(R.string.no_internet_connection)))
             }
@@ -61,7 +67,7 @@ class ContactViewModel(app: Application, private val contactRepository: ContactR
         }
     }
 
-    private fun hasInternetConnection(): Boolean{
+    fun hasInternetConnection(): Boolean{
         val connectivityManager = getApplication<ContactsApplication>().getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
