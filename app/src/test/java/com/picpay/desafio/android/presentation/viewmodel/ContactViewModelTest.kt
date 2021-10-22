@@ -1,14 +1,10 @@
 package com.picpay.desafio.android.presentation.viewmodel
 
-import android.app.Application
-import android.net.ConnectivityManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
 import com.picpay.desafio.android.ContactsApplication
-import com.picpay.desafio.android.MainCoroutineRule
-import com.picpay.desafio.android.domain.models.User
+import com.picpay.desafio.android.domain.models.UserEntity
 import com.picpay.desafio.android.framework.room.ContactDatabase
 import com.picpay.desafio.android.infrastructure.repository.ContactRepository
 import kotlinx.coroutines.*
@@ -20,7 +16,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.*
 import retrofit2.Response
 
@@ -49,7 +44,7 @@ class ContactViewModelTest {
         runBlockingTest {
 
             `when`(repositoryMock.getUsers()).thenReturn(
-                Response.success(listOf(User("", "", 1, "")))
+                Response.success(listOf(UserEntity("", "", 1, "")))
             )
             `when`(repositoryMock.getSavedContacts()).thenReturn(null)
 
@@ -71,7 +66,7 @@ class ContactViewModelTest {
     fun insertUsers() = runBlockingTest{
         val db = mock(ContactDatabase::class.java)
 
-        val listUsers = User("", "", 1, "")
+        val listUsers = UserEntity("", "", 1, "")
 
 //    `when`(db.getContactDao().upsert(listOf())).thenReturn(listOf(1))
 

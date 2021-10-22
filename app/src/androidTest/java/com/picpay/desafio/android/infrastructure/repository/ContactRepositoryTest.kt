@@ -5,10 +5,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.picpay.desafio.android.domain.models.User
+import com.picpay.desafio.android.domain.models.UserEntity
 import com.picpay.desafio.android.framework.room.ContactDatabase
 import com.picpay.desafio.android.getLiveDataValue
-import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -44,7 +43,7 @@ class ContactRepositoryTest{
 
     @Test
     fun should_save_and_return_saved_contacts() = runBlocking{
-        val user = User("","", 1,"")
+        val user = UserEntity("","", 1,"")
         repository.upsert(listOf(user))
 
         val usersSaved = repository.getSavedContacts().getLiveDataValue().find {user ->

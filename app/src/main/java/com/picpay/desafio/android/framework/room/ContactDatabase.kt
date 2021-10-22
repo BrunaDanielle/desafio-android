@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.picpay.desafio.android.domain.models.User
+import com.picpay.desafio.android.domain.models.UserEntity
 import com.picpay.desafio.android.infrastructure.interfaces.db.ContactDao
 
 @Database(
-    entities = [User::class],
+    entities = [UserEntity::class],
     version = 1,
     exportSchema = true
 )

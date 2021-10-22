@@ -17,7 +17,7 @@ class RetrofitInstance {
                 .build()
         }
 
-        val api by lazy {
+        val api: PicPayService by lazy {
             retrofit.create(PicPayService::class.java)
         }
     }

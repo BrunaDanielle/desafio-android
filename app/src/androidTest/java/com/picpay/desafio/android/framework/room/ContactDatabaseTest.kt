@@ -5,11 +5,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import androidx.test.runner.AndroidJUnit4
-import com.picpay.desafio.android.domain.models.User
+import com.picpay.desafio.android.domain.models.UserEntity
 import com.picpay.desafio.android.getLiveDataValue
 import com.picpay.desafio.android.infrastructure.interfaces.db.ContactDao
-import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -36,7 +34,7 @@ class ContactDatabaseTest{
 
     @Test
     fun should_write_and_read_contacts() = runBlocking{
-        val user = User("","", 1,"")
+        val user = UserEntity("","", 1,"")
         dao.upsert(listOf(user))
 
         val usersSaved = dao.getAllContacts().getLiveDataValue().find {user ->

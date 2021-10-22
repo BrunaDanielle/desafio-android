@@ -3,6 +3,7 @@ package com.picpay.desafio.android.ui.fragments
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,29 +11,31 @@ import com.picpay.desafio.android.R
 import com.picpay.desafio.android.domain.util.Resource
 import com.picpay.desafio.android.presentation.viewmodel.ContactViewModel
 import com.picpay.desafio.android.ui.adapter.UserListAdapter
-import com.picpay.desafio.android.ui.view.ContactsActivity
 import kotlinx.android.synthetic.main.fragment_contacts.*
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ContactsFragment : Fragment(R.layout.fragment_contacts) {
-    lateinit var viewModel: ContactViewModel
-    lateinit var userAdapter: UserListAdapter
+    private val viewModel: ContactViewModel by viewModel()
+    private val userAdapter: UserListAdapter by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = (activity as ContactsActivity).viewModel
         setUpRecyclerView()
 
         viewModel.users.observe(viewLifecycleOwner, Observer { response ->
             when (response) {
                 is Resource.Success -> {
-                    hideProgressBar()
+                    showProgressBar(false)
+                    showRecyclerView(true)
                     response.data?.let { usersResponse ->
                         userAdapter.setData(usersResponse)
                         viewModel.saveContacts(usersResponse)
                     }
                 }
                 is Resource.Error -> {
-                    hideProgressBar()
+                    showProgressBar(false)
+                    showRecyclerView(true)
 
                     response.message?.let {message ->
                         AlertDialog.Builder(context)
@@ -44,7 +47,7 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                     }
                 }
                 is Resource.Loading -> {
-                    showProgressBar()
+                    showProgressBar(true)
                 }
             }
         })
@@ -56,23 +59,21 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
         })
 
         swipeRefreshLayout.setOnRefreshListener {
-            recyclerView.visibility = View.INVISIBLE
+            showRecyclerView(false)
             viewModel.getUsers()
             swipeRefreshLayout.isRefreshing = false
         }
     }
 
-    private fun hideProgressBar() {
-        user_list_progress_bar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
+    private fun showRecyclerView(showRecyclerView: Boolean) {
+        recyclerView.isVisible = showRecyclerView
     }
 
-    private fun showProgressBar() {
-        user_list_progress_bar.visibility = View.VISIBLE
+    private fun showProgressBar(showProgressBar: Boolean) {
+        user_list_progress_bar.isVisible = showProgressBar
     }
 
     private fun setUpRecyclerView() {
-        userAdapter = UserListAdapter()
         recyclerView.apply {
             adapter = userAdapter
             layoutManager = LinearLayoutManager(activity)

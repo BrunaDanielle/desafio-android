@@ -1,13 +1,12 @@
 package com.picpay.desafio.android.presentation.viewmodel
 
-import android.app.Application
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.picpay.desafio.android.ContactsApplication
-import com.picpay.desafio.android.domain.models.User
+import com.picpay.desafio.android.domain.models.UserEntity
 import com.picpay.desafio.android.framework.room.ContactDatabase
 import com.picpay.desafio.android.getLiveDataValue
 import com.picpay.desafio.android.infrastructure.repository.ContactRepository
@@ -37,7 +36,7 @@ class ContactViewModelTest_{
 
     @Test
     fun should_save_and_return_saved_contacts(){
-        val user = User("", "user", 1, "")
+        val user = UserEntity("", "user", 1, "")
         viewModel.saveContacts(listOf(user))
 
         val user1 = viewModel.getSavedContacts().getLiveDataValue().find {user ->

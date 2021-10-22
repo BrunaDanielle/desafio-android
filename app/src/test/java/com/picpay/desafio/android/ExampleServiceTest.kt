@@ -2,7 +2,7 @@ package com.picpay.desafio.android
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import com.picpay.desafio.android.domain.models.User
+import com.picpay.desafio.android.domain.models.UserEntity
 import com.picpay.desafio.android.infrastructure.interfaces.network.PicPayService
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.runBlocking
@@ -17,7 +17,7 @@ class ExampleServiceTest {
     @Test
     fun exampleTest() = runBlocking() {
         // given
-        val expectedUsers = emptyList<User>()
+        val expectedUsers = emptyList<UserEntity>()
 
         whenever(service.example()).thenReturn(expectedUsers)
 

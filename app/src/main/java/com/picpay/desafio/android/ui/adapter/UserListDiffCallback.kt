@@ -1,11 +1,11 @@
 package com.picpay.desafio.android.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.picpay.desafio.android.domain.models.User
+import com.picpay.desafio.android.domain.models.UserEntity
 
 class UserListDiffCallback(
-    private val oldList: List<User>,
-    private val newList: List<User>
+    private val oldList: List<UserEntity>,
+    private val newList: List<UserEntity>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
