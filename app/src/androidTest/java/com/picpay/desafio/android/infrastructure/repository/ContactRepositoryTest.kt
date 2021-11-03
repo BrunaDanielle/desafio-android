@@ -22,7 +22,7 @@ class ContactRepositoryTest{
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var repository: ContactRepository
+    private lateinit var repository: ContactRepositoryImpl
     private lateinit var db: ContactDatabase
 
     @Before
@@ -30,7 +30,7 @@ class ContactRepositoryTest{
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, ContactDatabase::class.java)
             .allowMainThreadQueries().build()
-        repository = ContactRepository(db)
+        repository = ContactRepositoryImpl(db)
     }
 
     @Test

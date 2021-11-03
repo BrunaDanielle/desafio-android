@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.picpay.desafio.android.ContactsApplication
 import com.picpay.desafio.android.domain.models.UserEntity
 import com.picpay.desafio.android.framework.room.ContactDatabase
-import com.picpay.desafio.android.infrastructure.repository.ContactRepository
+import com.picpay.desafio.android.infrastructure.repository.ContactRepositoryImpl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -26,13 +26,13 @@ class ContactViewModelTest {
 
     private val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()
     private lateinit var contactViewModelSUT: ContactViewModel
-    private lateinit var repositoryMock: ContactRepository
+    private lateinit var repositoryMock: ContactRepositoryImpl
     private lateinit var appMock: ContactsApplication
 
     @ObsoleteCoroutinesApi
     @Before
     fun setUp() {
-        repositoryMock = mock(ContactRepository::class.java)
+        repositoryMock = mock(ContactRepositoryImpl::class.java)
         appMock = mock(ContactsApplication::class.java)
         contactViewModelSUT = ContactViewModel(appMock, repositoryMock)
 

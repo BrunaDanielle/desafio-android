@@ -9,7 +9,7 @@ import com.picpay.desafio.android.ContactsApplication
 import com.picpay.desafio.android.domain.models.UserEntity
 import com.picpay.desafio.android.framework.room.ContactDatabase
 import com.picpay.desafio.android.getLiveDataValue
-import com.picpay.desafio.android.infrastructure.repository.ContactRepository
+import com.picpay.desafio.android.infrastructure.repository.ContactRepositoryImpl
 import org.junit.*
 import org.junit.Assert.assertFalse
 import org.junit.runner.RunWith
@@ -21,7 +21,7 @@ class ContactViewModelTest_{
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var viewModel: ContactViewModel
-    private lateinit var repository: ContactRepository
+    private lateinit var repository: ContactRepositoryImpl
     private lateinit var db: ContactDatabase
 
     @Before
@@ -30,7 +30,7 @@ class ContactViewModelTest_{
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(context, ContactDatabase::class.java)
             .allowMainThreadQueries().build()
-        repository = ContactRepository(db)
+        repository = ContactRepositoryImpl(db)
         viewModel = ContactViewModel(ContactsApplication(), repository)
     }
 

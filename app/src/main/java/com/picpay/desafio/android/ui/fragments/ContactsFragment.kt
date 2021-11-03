@@ -30,21 +30,19 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
                     showRecyclerView(true)
                     response.data?.let { usersResponse ->
                         userAdapter.setData(usersResponse)
-                        viewModel.saveContacts(usersResponse)
                     }
                 }
                 is Resource.Error -> {
                     showProgressBar(false)
                     showRecyclerView(true)
 
-                    response.message?.let {message ->
-                        AlertDialog.Builder(context)
-                            .setCancelable(false)
-                            .setMessage(message)
-                            .setPositiveButton(context?.getString(R.string.ok_button), null)
-                            .create()
-                            .show()
-                    }
+                    AlertDialog.Builder(context)
+                        .setCancelable(false)
+                        .setMessage(getString(R.string.data_failure))
+                        .setPositiveButton(context?.getString(R.string.ok_button), null)
+                        .create()
+                        .show()
+
                 }
                 is Resource.Loading -> {
                     showProgressBar(true)
@@ -52,15 +50,10 @@ class ContactsFragment : Fragment(R.layout.fragment_contacts) {
             }
         })
 
-        viewModel.getSavedContacts().observe(viewLifecycleOwner, Observer { savedContacts ->
-            if (savedContacts == null || savedContacts.isEmpty()) viewModel.getUsers() else userAdapter.setData(
-                savedContacts
-            )
-        })
 
         swipeRefreshLayout.setOnRefreshListener {
             showRecyclerView(false)
-            viewModel.getUsers()
+            viewModel.reloadContacts()
             swipeRefreshLayout.isRefreshing = false
         }
     }

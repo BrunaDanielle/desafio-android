@@ -1,103 +1,35 @@
 package com.picpay.desafio.android.presentation.viewmodel
 
-import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.ConnectivityManager.*
-import android.net.NetworkCapabilities.*
-import android.os.Build
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.picpay.desafio.android.ContactsApplication
-import com.picpay.desafio.android.R
-import com.picpay.desafio.android.domain.models.UserEntity
+import com.picpay.desafio.android.domain.models.User
 import com.picpay.desafio.android.domain.usecase.ContactsUseCase
 import com.picpay.desafio.android.domain.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Response
-import java.io.IOException
 
 class ContactViewModel(
-    app: Application,
     private val contactUserCase: ContactsUseCase
-) : AndroidViewModel(app) {
-    val users: MutableLiveData<Resource<List<UserEntity>>> = MutableLiveData()
+) : ViewModel() {
+
+    private val _users: MutableLiveData<Resource<List<User>>> = MutableLiveData()
+    val users: LiveData<Resource<List<User>>> = _users
 
     init {
-        contactUserCase()
-    }
-
-    fun getUsers() {
         safeGetUsersCall()
     }
 
-    fun saveContacts(user: List<UserEntity>) = viewModelScope.launch {
-        contactRepository.upsert(user)
-    }
-
-    fun getSavedContacts() = contactRepository.getSavedContacts()
+    fun reloadContacts() = safeGetUsersCall()
 
     private fun safeGetUsersCall() {
-        users.postValue(Resource.Loading())
-        try {
-            if (hasInternetConnection()) {
-                viewModelScope.launch {
-                    withContext(Dispatchers.IO) {
-                        val response = contactRepository.getUsers()
-                        users.postValue(handleUsersResponse(response))
-                    }
-                }
-            } else {
-                users.postValue(Resource.Error(getApplication<ContactsApplication>().getString(R.string.no_internet_connection)))
-            }
-        } catch (t: Throwable) {
-            when (t) {
-                is IOException -> users.postValue(
-                    Resource.Error(
-                        getApplication<ContactsApplication>().getString(
-                            R.string.network_failure
-                        )
-                    )
-                )
-                else -> users.postValue(
-                    Resource.Error(
-                        getApplication<ContactsApplication>().getString(
-                            R.string.data_failure
-                        )
-                    )
-                )
+        _users.postValue(Resource.Loading())
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                _users.postValue(contactUserCase.getContacts())
             }
         }
-    }
-
-    fun hasInternetConnection(): Boolean {
-        val connectivityManager = getApplication<ContactsApplication>().getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val activeNetwork = connectivityManager.activeNetwork ?: return false
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-            return when {
-                capabilities.hasTransport(TRANSPORT_WIFI) -> true
-                capabilities.hasTransport(TRANSPORT_CELLULAR) -> true
-                capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            connectivityManager.activeNetworkInfo?.run {
-                return when (type) {
-                    TYPE_WIFI -> true
-                    TYPE_MOBILE -> true
-                    TYPE_ETHERNET -> true
-                    else -> false
-                }
-            }
-        }
-        return false
     }
 }

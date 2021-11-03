@@ -14,5 +14,5 @@ interface ContactDao {
     suspend fun upsert(users: List<UserEntity>): List<Long>
 
     @Query("SELECT * FROM users")
-    fun getAllContacts(): LiveData<List<UserEntity>>
+    fun getAllContacts(): List<UserEntity>
 }

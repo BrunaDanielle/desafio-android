@@ -1,12 +1,12 @@
 package com.picpay.desafio.android.domain.usecase
 
-import androidx.lifecycle.LiveData
-import com.picpay.desafio.android.infrastructure.repository.ContactRepository
+import com.picpay.desafio.android.domain.interfaces.ContactRepository
+import com.picpay.desafio.android.domain.models.User
+import com.picpay.desafio.android.domain.util.Resource
 
 class ContactsUseCase(private val repository: ContactRepository) {
 
-    suspend operator fun invoke(): LiveData<Unit> {
-        repository.getUsers()
+    suspend fun getContacts(): Resource<List<User>> {
         return repository.getSavedContacts()
     }
 }
