@@ -16,12 +16,6 @@ class ContactInfoFragment : Fragment() {
     private val args: ContactInfoFragmentArgs by navArgs()
     private lateinit var user: User
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //val bundle = arguments ?: return
-       // args = ContactInfoFragmentArgs.fromBundle(bundle)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
