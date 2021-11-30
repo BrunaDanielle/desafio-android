@@ -1,5 +1,6 @@
 package com.picpay.desafio.android.di
 
+import android.content.Context
 import com.picpay.desafio.android.domain.interfaces.ContactRepository
 import com.picpay.desafio.android.domain.usecase.ContactsUseCase
 import com.picpay.desafio.android.framework.room.ContactDatabase
@@ -19,6 +20,8 @@ object ContactsModule {
 
         factory { UserListAdapter() }
         factory { ContactsUseCase(repository = get()) }
-        factory<ContactRepository> { ContactRepositoryImpl(db = ContactDatabase(context = androidContext())) }
+        factory<ContactRepository> { ContactRepositoryImpl(db = getContactDatabase(androidContext())) }
     }
+
+    private fun getContactDatabase(context: Context) = ContactDatabase(context = context)
 }

@@ -8,5 +8,7 @@
     <string name="network_failure">Erro de conexão com a rede</string>
     <string name="data_failure">Erro ao carregar dados</string>
     <string name="ok_button">OK</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

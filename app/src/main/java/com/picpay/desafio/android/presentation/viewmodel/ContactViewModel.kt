@@ -25,7 +25,7 @@ class ContactViewModel(
     fun reloadContacts() = safeGetUsersCall()
 
     private fun safeGetUsersCall() {
-        _users.postValue(Resource.Loading())
+        _users.value = Resource.Loading()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 _users.postValue(contactUserCase.getContacts())
